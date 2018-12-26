@@ -15,7 +15,7 @@ class AttributeController {
     return attributes;
   }
 
-  async update({ params, request }) {
+  async update() {
     return attributes;
   }
 

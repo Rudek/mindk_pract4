@@ -16,21 +16,21 @@ const Route = use('Route');
 
 Route.get('/', () => ({ status: 'Ok', version: '1.0.0' }));
 Route.get('/login', 'AuthController.login');
-Route.get('/product/show/:id', 'ProductController.show');
-Route.get('/product', 'ProductController.showAll');
-Route.get('/product/filter', 'ProductController.filter');
-Route.post('/product/add', 'ProductController.add');
-Route.patch('/product/update/:id', 'ProductController.update');
-Route.delete('/product/delete/:id', 'ProductController.delete');
 
-Route.get('/category/show/:id', 'CategoryController.show');
-Route.get('/category', 'CategoryController.showAll');
-Route.post('/category/add', 'CategoryController.add');
-Route.patch('/category/update/:id', 'CategoryController.update');
-Route.delete('/category/delete/:id', 'CategoryController.delete');
+Route.get('/products/:id', 'ProductController.show');
+Route.get('/products?', 'ProductController.showAll');
+Route.post('/products', 'ProductController.add');
+Route.put('/products/:id', 'ProductController.update');
+Route.delete('/products/:id', 'ProductController.delete');
 
-Route.get('/attribute/show/:id', 'AttributeController.show');
-Route.get('/attribute', 'AttributeController.showAll');
-Route.post('/attribute/add', 'AttributeController.add');
-Route.patch('/attribute/update/:id', 'AttributeController.update');
-Route.delete('/attribute/delete/:id', 'AttributeController.delete');
+Route.get('/categories/:id', 'CategoryController.show');
+Route.get('/categories', 'CategoryController.showAll');
+Route.post('/categories', 'CategoryController.add');
+Route.put('/categories/:id', 'CategoryController.update');
+Route.delete('/categories/:id', 'CategoryController.delete');
+
+Route.get('/attributes/:id', 'AttributeController.show');
+Route.get('/attributes', 'AttributeController.showAll');
+Route.post('/attributes', 'AttributeController.add');
+Route.put('/attributes/:id', 'AttributeController.update');
+Route.delete('/attributes/:id', 'AttributeController.delete');

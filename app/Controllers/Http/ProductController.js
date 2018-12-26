@@ -13,10 +13,6 @@ class ProductController {
     return products;
   }
 
-  async filter({ params }) {
-    return products;
-  }
-
   async add({ request }) {
     console.log(request);
     products.push(request.all());
@@ -36,8 +32,6 @@ class ProductController {
     products.splice(params.id, 1);
     return products;
   }
-
-
 }
 
 module.exports = ProductController;

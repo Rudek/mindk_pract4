@@ -19,7 +19,7 @@ class CategoryController {
     return categories;
   }
 
-  async update({ params, request }) {
+  async update() {
     return categories;
   }
 
