@@ -22,3 +22,15 @@ Route.get('/product/filter', 'ProductController.filter');
 Route.post('/product/add', 'ProductController.add');
 Route.patch('/product/update/:id', 'ProductController.update');
 Route.delete('/product/delete/:id', 'ProductController.delete');
+
+Route.get('/category/show/:id', 'CategoryController.show');
+Route.get('/category', 'CategoryController.showAll');
+Route.post('/category/add', 'CategoryController.add');
+Route.patch('/category/update/:id', 'CategoryController.update');
+Route.delete('/category/delete/:id', 'CategoryController.delete');
+
+Route.get('/attribute/show/:id', 'AttributeController.show');
+Route.get('/attribute', 'AttributeController.showAll');
+Route.post('/attribute/add', 'AttributeController.add');
+Route.patch('/attribute/update/:id', 'AttributeController.update');
+Route.delete('/attribute/delete/:id', 'AttributeController.delete');
