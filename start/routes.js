@@ -15,3 +15,10 @@
 const Route = use('Route');
 
 Route.get('/', () => ({ status: 'Ok', version: '1.0.0' }));
+Route.get('/login', 'AuthController.login');
+Route.get('/product/show/:id', 'ProductController.show');
+Route.get('/product', 'ProductController.showAll');
+Route.get('/product/filter', 'ProductController.filter');
+Route.post('/product/add', 'ProductController.add');
+Route.patch('/product/update/:id', 'ProductController.update');
+Route.delete('/product/delete/:id', 'ProductController.delete');
