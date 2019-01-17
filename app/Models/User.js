@@ -32,6 +32,14 @@ class User extends Model {
   tokens() {
     return this.hasMany('App/Models/Token');
   }
+
+  product() {
+    return this.hasMany('App/Models/Product');
+  }
+
+  static get hidden() {
+    return ['password'];
+  }
 }
 
 module.exports = User;
