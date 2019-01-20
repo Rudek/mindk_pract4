@@ -14,7 +14,7 @@ class Category extends Model {
     return this.hasMany('App/Models/Product');
   }
 
-  attr() {
+  attrs() {
     return this.hasMany('App/Models/Attribute');
   }
 }

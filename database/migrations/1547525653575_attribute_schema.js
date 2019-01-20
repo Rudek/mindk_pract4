@@ -7,11 +7,11 @@ class AttributeSchema extends Schema {
       table.increments();
       table.string('name', 60).notNullable();
       table
-        .integer('categ_id')
+        .integer('category_id')
         .notNullable()
         .index();
       table
-        .foreign('categ_id')
+        .foreign('category_id')
         .references('id')
         .on('categories')
         .onDelete('cascade');
