@@ -1,28 +1,30 @@
-const attributes = [{ phones: ['display', 'camera'] }, { TV: ['display', 'smart TV'] }, { 'washing machine': [] }];
+const Attribute = use('App/Models/Attribute');
 
 class AttributeController {
   async show({ params }) {
-    return attributes[params.id];
+    return Attribute.findOrFail(params.id);
   }
 
   async showAll() {
-    return attributes;
+    return Attribute.all();
   }
 
-  async add({ request }) {
-    console.log(attributes);
-    attributes.push(request.all());
-    return attributes;
+  async add({ request, response }) {
+    const attribute = await Attribute.create(request.only(['name', 'category_id']));
+    return response.status(201).send(attribute);
   }
 
-  async update() {
-    return attributes;
+  async update({ params, request }) {
+    const attribute = await Attribute.findOrFail(params.id);
+    attribute.merge(request.only(['name', 'category_id']));
+    await attribute.save();
+    return attribute;
   }
 
-  async delete({ params }) {
-    console.log(params);
-    attributes.splice(params.id, 1);
-    return attributes;
+  async delete({ params, response }) {
+    const attribute = await Attribute.findOrFail(params.id);
+    await attribute.delete();
+    return response.status(204).send();
   }
 }
 
