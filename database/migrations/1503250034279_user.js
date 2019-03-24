@@ -14,6 +14,15 @@ class UserSchema extends Schema {
         .notNullable()
         .unique();
       table.string('password', 60).notNullable();
+      table
+        .integer('role')
+        .notNullable()
+        .index();
+      table
+        .foreign('role')
+        .references('id')
+        .on('roles')
+        .onDelete('cascade');
       table.timestamps();
     });
   }

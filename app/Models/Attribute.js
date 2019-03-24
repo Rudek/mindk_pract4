@@ -15,7 +15,7 @@ class Attribute extends Model {
   }
 
   attrs() {
-    return this.hasMany('App/Models/Product').pivotModel('App/Models/ProductAttribute');
+    return this.belongsToMany('App/Models/Product').pivotModel('App/Models/ProductAttribute');
   }
 }
 

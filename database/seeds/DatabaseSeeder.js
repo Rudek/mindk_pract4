@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /*
 |--------------------------------------------------------------------------
 | DatabaseSeeder
@@ -11,97 +12,56 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory');
 
-class DatabaseSeeder {
+class Database2Seeder {
   async run() {
+    const amtRoles = 2;
     const amtUsers = 2;
     const amtCategs = 3;
     const amtAttrs = 3;
     const amtProds = 2;
 
-    const users = await Factory.model('App/Models/User').createMany(amtUsers);
+    const roles = await Factory.model('App/Models/Role').createMany(amtRoles);
+    const users = Promise.all(
+      roles.map(role => Factory.model('App/Models/User').createMany(amtUsers, { role: role.id }))
+    );
 
-    let categories;
-    let attributes;
-    let products;
-    await Factory.model('App/Models/Category')
-      .createMany(amtCategs)
-      .then(categs => {
-        categories = categs;
-        const attrsPromises = [];
-        let i = 0;
-        while (i < amtCategs) {
-          attrsPromises.push(Factory.model('App/Models/Attribute').makeMany(amtAttrs));
-          i++;
-        }
-        return Promise.all(attrsPromises);
-      })
-      .then(attrs => {
-        attributes = attrs;
-        const attrsPromises = [];
-        for (const key in categories) {
-          for (const attr of attrs[key]) {
-            attr.category_id = categories[key].id;
-            attrsPromises.push(attr.save());
-          }
-        }
-        return Promise.all(attrsPromises);
-      })
-      .then(attrs => {
-        const productPromises = [];
-        for (let u = 1; u <= amtUsers; u++) {
-          for (let c = 1; c <= amtCategs; c++) {
-            for (let p = 1; p <= amtProds; p++) {
-              productPromises.push(Factory.model('App/Models/Product').make());
-            }
-          }
-        }
-        return Promise.all(productPromises);
-      })
-      .then(prods => {
-        // console.log(products);
-        products = prods;
-        const productPromises = [];
-        let keyProd = 0;
-        for (const user of users) {
-          for (const categ of categories) {
-            for (let p = 0; p < amtProds; p++, keyProd++) {
-              prods[keyProd].user_id = user.id;
-              prods[keyProd].category_id = categ.id;
-              productPromises.push(prods[keyProd].save());
-            }
-          }
-        }
-        return Promise.all(productPromises);
-      })
-      .then(() => {
-        const productAttributesPromises = [];
-        for (let p = 0; p < products.length; p++) {
-          for (const key in categories) {
-            for (const attribute of attributes[key]) {
-              productAttributesPromises.push(Factory.model('App/Models/ProductAttribute').make());
-            }
-          }
-        }
-        return Promise.all(productAttributesPromises);
-      })
-      .then(productAttributes => {
-        let pa = 0;
-        const productAttributesPromises = [];
-        for (const product of products) {
-          for (const key in categories) {
-            for (const attribute of attributes[key]) {
-              if (attribute.category_id === product.category_id) {
-                productAttributes[pa].product_id = product.id;
-                productAttributes[pa].attribute_id = attribute.id;
-                productAttributesPromises.push(productAttributes[pa].save());
-                pa++;
-              }
-            }
-          }
-        }
-        return Promise.all(productAttributesPromises);
-      });
+    const categories = await Factory.model('App/Models/Category').createMany(amtCategs);
+
+    const attributes = (await Promise.all(
+      categories.reduce(
+        (prev, category) =>
+          prev.concat(Factory.model('App/Models/Attribute').createMany(amtAttrs, { category_id: category.id })),
+        []
+      )
+    )).reduce((prev, attribute) => prev.concat(attribute), []);
+
+    const products = (await Promise.all(
+      users.reduce(
+        (prev, user) =>
+          prev.concat(
+            categories.map(category =>
+              Factory.model('App/Models/Product').createMany(amtProds, { user_id: user.id, category_id: category.id })
+            )
+          ),
+        []
+      )
+    )).reduce((prev, product) => prev.concat(product), []);
+
+    await Promise.all(
+      products.reduce(
+        (prev, product) =>
+          prev.concat(
+            attributes.filter(attribute => attribute.category_id === product.category_id).map(attribute =>
+              Factory.model('App/Models/ProductAttribute').create({
+                product_id: product.id,
+                attribute_id: attribute.id
+              })
+            )
+          ),
+        []
+      )
+    );
   }
 }
 
-module.exports = DatabaseSeeder;
+module.exports = Database2Seeder;
