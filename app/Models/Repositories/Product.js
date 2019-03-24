@@ -21,7 +21,7 @@ class Product {
   static async filterProducts({ categ, name, user, order = 'id', sort = 'asc' }) {
     const products = await this.query()
       .with('user', builder => builder.setVisible(Product.userFields))
-      .where(function() {
+      .where(() => {
         if (categ) {
           this.where('category_id', categ);
         }
