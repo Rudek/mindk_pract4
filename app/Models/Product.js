@@ -1,5 +1,5 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const BaseModel = require('./BaseModel')
+const BaseModel = require('./BaseModel');
 
 class Product extends BaseModel {
   static boot() {
