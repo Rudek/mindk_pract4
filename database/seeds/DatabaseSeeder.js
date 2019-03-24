@@ -12,7 +12,7 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory');
 
-class Database2Seeder {
+class DatabaseSeeder {
   async run() {
     const amtRoles = 2;
     const amtUsers = 2;
@@ -64,4 +64,4 @@ class Database2Seeder {
   }
 }
 
-module.exports = Database2Seeder;
+module.exports = DatabaseSeeder;
