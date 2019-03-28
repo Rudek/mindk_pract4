@@ -6,9 +6,14 @@ class RoleSchema extends Schema {
     this.create('roles', table => {
       table.increments();
       table
+        .string('slug')
+        .notNullable()
+        .unique();
+      table
         .string('name', 20)
         .notNullable()
         .unique();
+      table.text('description').nullable();
     });
   }
 

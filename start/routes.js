@@ -15,22 +15,24 @@
 const Route = use('Route');
 
 Route.get('/', () => ({ status: 'Ok', version: '1.0.0' }));
-Route.get('/login', 'AuthController.login');
+Route.group(() => {
+  Route.get('/user/login', 'UserController.login');
 
-Route.get('/products/:id', 'ProductController.show');
-Route.get('/products?', 'ProductController.showAll');
-Route.post('/products', 'ProductController.add');
-Route.put('/products/:id', 'ProductController.update');
-Route.delete('/products/:id', 'ProductController.delete');
+  Route.get('/products', 'ProductController.showAll').validator('FilterProducts');
+  Route.get('/products/:id', 'ProductController.show');
+  Route.post('/products', 'ProductController.add').validator('SaveProduct');
+  Route.put('/products/:id', 'ProductController.update').validator('SaveProduct');
+  Route.delete('/products/:id', 'ProductController.delete');
 
-Route.get('/categories/:id', 'CategoryController.show');
-Route.get('/categories', 'CategoryController.showAll');
-Route.post('/categories', 'CategoryController.add');
-Route.put('/categories/:id', 'CategoryController.update');
-Route.delete('/categories/:id', 'CategoryController.delete');
+  Route.get('/categories', 'CategoryController.showAll');
+  Route.get('/categories/:id', 'CategoryController.show');
+  Route.post('/categories', 'CategoryController.add').validator('CreateCategory');
+  Route.put('/categories/:id', 'CategoryController.update').validator('UpdateCategory');
+  Route.delete('/categories/:id', 'CategoryController.delete');
 
-Route.get('/attributes/:id', 'AttributeController.show');
-Route.get('/attributes', 'AttributeController.showAll');
-Route.post('/attributes', 'AttributeController.add');
-Route.put('/attributes/:id', 'AttributeController.update');
-Route.delete('/attributes/:id', 'AttributeController.delete');
+  Route.get('/attributes', 'AttributeController.showAll');
+  Route.get('/attributes/:id', 'AttributeController.show');
+  Route.post('/attributes', 'AttributeController.add').validator('SaveAttribute');
+  Route.put('/attributes/:id', 'AttributeController.update').validator('SaveAttribute');
+  Route.delete('/attributes/:id', 'AttributeController.delete');
+}).prefix('api/v1');

@@ -12,15 +12,15 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory');
 
-Factory.blueprint('App/Models/Role', async faker => ({
-  name: faker.pickone(['admin', 'user'])
-}));
+/* Factory.blueprint('App/Models/Role', async faker => ({
+  name: faker.pickone(['admin', 'user']),
+  description: faker.sentence();
+})); */
 
-Factory.blueprint('App/Models/User', async (faker, i, data) => ({
-  username: faker.username(),
-  email: faker.email(),
-  password: '12345',
-  role: data.role
+Factory.blueprint('App/Models/User', async (faker, i) => ({
+  username: `user${i}`,
+  email: `user${i}@user.com`,
+  password: '12345'
 }));
 
 Factory.blueprint('App/Models/Category', async faker => ({

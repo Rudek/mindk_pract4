@@ -1,7 +1,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
 
-class Role extends Model {
+class RoleUsers extends Model {
   static get createdAtColumn() {
     return null;
   }
@@ -11,8 +11,12 @@ class Role extends Model {
   }
 
   users() {
-    return this.belongsToMany('App/Models/User').pivotModel('App/Models/RoleUsers');
+    return this.belongsTo('App/Models/User');
+  }
+
+  roles() {
+    return this.belongsTo('App/Models/Role');
   }
 }
 
-module.exports = Role;
+module.exports = RoleUsers;

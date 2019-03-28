@@ -11,19 +11,32 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory');
+const Role = use('App/Models/Role');
 
 class DatabaseSeeder {
   async run() {
-    const amtRoles = 2;
     const amtUsers = 2;
     const amtCategs = 3;
     const amtAttrs = 3;
     const amtProds = 2;
 
-    const roles = await Factory.model('App/Models/Role').createMany(amtRoles);
-    const users = Promise.all(
-      roles.map(role => Factory.model('App/Models/User').createMany(amtUsers, { role: role.id }))
-    );
+    let roles = [];
+    roles.push(
+      Role.create({
+        name: 'User',
+        slug: 'user',
+        description: 'manage user privileges'
+      }));
+    roles.push(
+      Role.create({
+        name: 'Admin',
+        slug: 'admin',
+        description: 'manage administration privileges'
+      }));
+    roles = await Promise.all(roles);
+
+    const users = await Factory.model('App/Models/User').createMany(amtUsers);
+    await Promise.all(users.map((user, i) => user.roles().attach([roles[i].id])));
 
     const categories = await Factory.model('App/Models/Category').createMany(amtCategs);
 
