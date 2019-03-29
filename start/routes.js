@@ -15,22 +15,37 @@
 const Route = use('Route');
 
 Route.get('/', () => ({ status: 'Ok', version: '1.0.0' }));
-Route.get('/login', 'AuthController.login');
+Route.group(() => {
+  Route.get('/user/login', 'UserController.login');
+  Route.get('/user/logout', 'UserController.logout');
 
-Route.get('/products/:id', 'ProductController.show');
-Route.get('/products?', 'ProductController.showAll');
-Route.post('/products', 'ProductController.add');
-Route.put('/products/:id', 'ProductController.update');
-Route.delete('/products/:id', 'ProductController.delete');
+  Route.get('/products', 'ProductController.showAll').validator('FilterProducts');
+  Route.get('/products/:id', 'ProductController.show');
+  Route.post('/products', 'ProductController.add')
+    .validator('SaveProduct')
+    .middleware(['auth', 'is:user']);
+  Route.put('/products/:id', 'ProductController.update')
+    .validator('SaveProduct')
+    .middleware(['auth', 'is:user']);
+  Route.delete('/products/:id', 'ProductController.delete').middleware(['auth', 'is:user']);
 
-Route.get('/categories/:id', 'CategoryController.show');
-Route.get('/categories', 'CategoryController.showAll');
-Route.post('/categories', 'CategoryController.add');
-Route.put('/categories/:id', 'CategoryController.update');
-Route.delete('/categories/:id', 'CategoryController.delete');
+  Route.get('/categories', 'CategoryController.showAll');
+  Route.get('/categories/:id', 'CategoryController.show');
+  Route.post('/categories', 'CategoryController.add')
+    .validator('CreateCategory')
+    .middleware(['auth', 'is:admin']);
+  Route.put('/categories/:id', 'CategoryController.update')
+    .validator('UpdateCategory')
+    .middleware(['auth', 'is:user']);
+  Route.delete('/categories/:id', 'CategoryController.delete').middleware(['auth', 'is:user']);
 
-Route.get('/attributes/:id', 'AttributeController.show');
-Route.get('/attributes', 'AttributeController.showAll');
-Route.post('/attributes', 'AttributeController.add');
-Route.put('/attributes/:id', 'AttributeController.update');
-Route.delete('/attributes/:id', 'AttributeController.delete');
+  Route.get('/attributes', 'AttributeController.showAll');
+  Route.get('/attributes/:id', 'AttributeController.show');
+  Route.post('/attributes', 'AttributeController.add')
+    .validator('SaveAttribute')
+    .middleware(['auth', 'is:user']);
+  Route.put('/attributes/:id', 'AttributeController.update')
+    .validator('SaveAttribute')
+    .middleware(['auth', 'is:user']);
+  Route.delete('/attributes/:id', 'AttributeController.delete').middleware(['auth', 'is:user']);
+}).prefix('api/v1');
