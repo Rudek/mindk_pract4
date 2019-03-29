@@ -1,9 +1,7 @@
-'use strict'
-
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use('Model')
+const BaseModel = require('./BaseModel');
 
-class ProductAttribute extends Model {
+class ProductAttribute extends BaseModel {
   static get createdAtColumn() {
     return null;
   }
@@ -11,6 +9,7 @@ class ProductAttribute extends Model {
   static get updatedAtColumn() {
     return null;
   }
+
   product() {
     return this.belongsTo('App/Models/Product');
   }
@@ -20,4 +19,4 @@ class ProductAttribute extends Model {
   }
 }
 
-module.exports = ProductAttribute
+module.exports = ProductAttribute;
