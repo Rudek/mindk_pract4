@@ -1,7 +1,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const BaseModel = require('./BaseModel');
+const Model = use('Model');
 
-class ProductAttribute extends BaseModel {
+class ProductAttribute extends Model {
   static get createdAtColumn() {
     return null;
   }
