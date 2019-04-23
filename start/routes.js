@@ -26,8 +26,8 @@ Route.group(() => {
     .middleware(['auth', 'is:user']);
   Route.put('/products/:id', 'ProductController.update')
     .validator('SaveProduct')
-    .middleware(['auth', 'is:user']);
-  Route.delete('/products/:id', 'ProductController.delete').middleware(['auth', 'is:user']);
+    .middleware(['auth', 'is:user', 'isOwner']);
+  Route.delete('/products/:id', 'ProductController.delete').middleware(['auth', 'is:user', 'isOwner']);
 
   Route.get('/categories', 'CategoryController.showAll');
   Route.get('/categories/:id', 'CategoryController.show');
@@ -36,16 +36,16 @@ Route.group(() => {
     .middleware(['auth', 'is:admin']);
   Route.put('/categories/:id', 'CategoryController.update')
     .validator('UpdateCategory')
-    .middleware(['auth', 'is:user']);
-  Route.delete('/categories/:id', 'CategoryController.delete').middleware(['auth', 'is:user']);
+    .middleware(['auth', 'is:admin']);
+  Route.delete('/categories/:id', 'CategoryController.delete').middleware(['auth', 'is:admin']);
 
   Route.get('/attributes', 'AttributeController.showAll');
   Route.get('/attributes/:id', 'AttributeController.show');
   Route.post('/attributes', 'AttributeController.add')
     .validator('SaveAttribute')
-    .middleware(['auth', 'is:user']);
+    .middleware(['auth', 'is:admin']);
   Route.put('/attributes/:id', 'AttributeController.update')
     .validator('SaveAttribute')
-    .middleware(['auth', 'is:user']);
-  Route.delete('/attributes/:id', 'AttributeController.delete').middleware(['auth', 'is:user']);
+    .middleware(['auth', 'is:admin']);
+  Route.delete('/attributes/:id', 'AttributeController.delete').middleware(['auth', 'is:admin']);
 }).prefix('api/v1');
