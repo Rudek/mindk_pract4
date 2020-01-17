@@ -1,32 +1,31 @@
-const categories = [
-  { name: 'phones', attrs: ['display', 'camera'] },
-  { name: 'TV', attrs: [] },
-  { name: 'washing machine', attrs: [] }
-];
+const Category = use('App/Models/Category');
+// const Database = use('Database');
 
 class CategoryController {
   async show({ params }) {
-    return categories[params.id];
+    return Category.getCategAttrsById(params.id);
   }
 
   async showAll() {
-    return categories;
+    return Category.all();
   }
 
-  async add({ request }) {
-    console.log(categories);
-    categories.push(request.all());
-    return categories;
+  async add({ request, response }) {
+    const { name, attrs } = request.post();
+    const category = await Category.saveCategAttrs(name, attrs);
+    return response.status(201).send(category);
   }
 
-  async update() {
-    return categories;
+  async update({ request, response, params }) {
+    const { name, attrs } = request.post();
+    const category = await Category.updateCategAttrs(params.id, name, attrs);
+    return response.send(category);
   }
 
-  async delete({ params }) {
-    console.log(params);
-    categories.splice(params.id, 1);
-    return categories;
+  async delete({ params, response }) {
+    const category = await Category.findOrFail(params.id);
+    await category.delete();
+    return response.route('CategoryController.showAll');
   }
 }
 
