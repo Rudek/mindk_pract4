@@ -1,36 +1,36 @@
-const products = [
-  { name: 'IPhone XS Max', price: 1000, color: 'black' },
-  { name: 'Samsung Galaxy S10', price: 800, color: 'blue' },
-  { name: 'OnePlus 7', price: 600, color: 'black' }
-];
+const Product = use('App/Models/Product');
 
 class ProductController {
+  constructor() {
+    this.fields = ['name', 'price', 'category_id'];
+  }
+
   async show({ params }) {
-    return products[params.id];
+    return Product.getProductById(params.id);
   }
 
-  async showAll() {
-    return products;
+  async showAll({ request }) {
+    return Product.filterProducts(request.get());
   }
 
-  async add({ request }) {
-    console.log(request);
-    products.push(request.all());
-    return products;
+  async add({ request, response, auth }) {
+    const product = request.only(this.fields);
+    const { attrs } = request.input('attrs', []);
+    product.user_id = auth.user.id;
+    response.status(201).send(Product.saveProduct(product, attrs));
   }
 
-  async update({ params, request }) {
-    const product = request.all();
-    products[params.id].name = product.name;
-    products[params.id].price = product.price;
-    products[params.id].color = product.color;
-    return products;
+  async update({ params, request, auth }) {
+    const product = request.only(this.fields);
+    const { attrs } = request.only(['attrs']);
+    product.user_id = auth.user.id;
+    return Product.updateProduct(params.id, product, attrs);
   }
 
-  async delete({ params }) {
-    console.log(params);
-    products.splice(params.id, 1);
-    return products;
+  async delete({ params, response }) {
+    const product = await Product.findOrFail(params.id);
+    await product.delete();
+    return response.status(204).send(product);
   }
 }
 
